@@ -1,7 +1,7 @@
 #---------------------------------
 #         Crea deployment
 #---------------------------------
-# Estamos creando un balanceador de carga creando dos replicas
+# Estamos creando un load_balancer, creando dos replicas de ese pod
 resource "kubernetes_deployment_v1" "webapp-deploy" {
   metadata {
     name = var.name_deploy
@@ -58,7 +58,7 @@ resource "kubernetes_service_v1" "webapp-svc" {
 }
 
 #-------------------------------------
-#       Crea un ingress
+#       Crea un Ingress
 #-------------------------------------
 resource "kubernetes_ingress_v1" "webapp-ingress" {
   metadata {
