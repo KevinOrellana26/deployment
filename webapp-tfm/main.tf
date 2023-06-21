@@ -4,23 +4,23 @@
 # Estamos creando un balanceador de carga creando dos replicas
 resource "kubernetes_deployment_v1" "webapp-deploy" {
   metadata {
-    name = "webapp-deploy"
+    name = var.name_deploy
     labels = {
-      app = "webapp"
+      app = var.nm_lbls-app
     }
-    namespace = "tst-ns-tfm"
+    namespace = var.namespace
   }
   spec {
     replicas = 2
     selector {
       match_labels = {
-        app = "webapp"
+        app = var.nm_lbls-app
       }
     }
     template {
       metadata {
         labels = {
-          app = "webapp"
+          app = var.nm_lbls-app
         }
       }
       spec {
@@ -28,7 +28,7 @@ resource "kubernetes_deployment_v1" "webapp-deploy" {
           image = "kodekloud/webapp-color:v1"
           name  = "webapp-ko"
           port {
-            container_port = 8080
+            container_port = var.puerto_contenedor #Puerto del contenedor
           }
         }
       }
@@ -41,8 +41,8 @@ resource "kubernetes_deployment_v1" "webapp-deploy" {
 #-----------------------------------
 resource "kubernetes_service_v1" "webapp-svc" {
   metadata {
-    name      = "webapp-svc"
-    namespace = "tst-ns-tfm"
+    name      = var.nm_svc
+    namespace = var.namespace
   }
   spec {
     selector = {
@@ -50,8 +50,8 @@ resource "kubernetes_service_v1" "webapp-svc" {
     }
     session_affinity = "ClientIP"
     port {
-      port        = 8088
-      target_port = 8080
+      port        = var.puerto_svc        #Puerto del servicio
+      target_port = var.puerto_contenedor #Puerto del contenedor
     }
     type = "NodePort"
   }
@@ -62,8 +62,8 @@ resource "kubernetes_service_v1" "webapp-svc" {
 #-------------------------------------
 resource "kubernetes_ingress_v1" "webapp-ingress" {
   metadata {
-    name      = "webapp-ingress"
-    namespace = "tst-ns-tfm"
+    name      = var.nm_ingress
+    namespace = var.namespace
     annotations = {
       "kubernetes.io/ingress.class"                 = "nginx",
       "cert-manager.io/cluster-issuer"              = "syndeno-issuer"
@@ -74,14 +74,14 @@ resource "kubernetes_ingress_v1" "webapp-ingress" {
 
   spec {
     rule {
-      host = "webapp.plt.aw.syndeno.net"
+      host = var.dns
       http {
         path {
           backend {
             service {
-              name = "webapp-svc"
+              name = var.nm_svc
               port {
-                number = 8088
+                number = var.puerto_svc #Puerto del servicio
               }
             }
           }
@@ -91,8 +91,8 @@ resource "kubernetes_ingress_v1" "webapp-ingress" {
     }
 
     tls {
-      hosts       = ["webapp.plt.aw.syndeno.net"]
-      secret_name = "webapp.plt.aw.syndeno.net"
+      hosts       = [var.dns]
+      secret_name = var.dns
     }
   }
 }
