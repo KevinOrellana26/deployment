@@ -41,7 +41,7 @@ resource "kubernetes_deployment_v1" "webapp-deploy" {
 #-----------------------------------
 resource "kubernetes_service_v1" "webapp-svc" {
   metadata {
-    name = "webapp-svc"
+    name      = "webapp-svc"
     namespace = "tst-ns-tfm"
   }
   spec {
@@ -62,16 +62,16 @@ resource "kubernetes_service_v1" "webapp-svc" {
 #-------------------------------------
 resource "kubernetes_ingress_v1" "webapp-ingress" {
   metadata {
-    name = "webapp-ingress"
+    name      = "webapp-ingress"
     namespace = "tst-ns-tfm"
     annotations = {
-      "kubernetes.io/ingress.class" = "nginx",
-      "cert-manager.io/cluster-issuer" = "syndeno-issuer"
-      "kubernetes.io/ingress.allow-http" = "false"
+      "kubernetes.io/ingress.class"                 = "nginx",
+      "cert-manager.io/cluster-issuer"              = "syndeno-issuer"
+      "kubernetes.io/ingress.allow-http"            = "false"
       "nginx.ingress.kubernetes.io/proxy-body-size" = "0"
     }
   }
-  
+
   spec {
     rule {
       host = "webapp.plt.aw.syndeno.net"
@@ -91,8 +91,8 @@ resource "kubernetes_ingress_v1" "webapp-ingress" {
     }
 
     tls {
-     hosts = ["webapp.plt.aw.syndeno.net"]
-     secret_name = "webapp.plt.aw.syndeno.net"
+      hosts       = ["webapp.plt.aw.syndeno.net"]
+      secret_name = "webapp.plt.aw.syndeno.net"
     }
   }
 }

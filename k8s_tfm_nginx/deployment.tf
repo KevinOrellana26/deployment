@@ -3,12 +3,12 @@
 #---------------------------
 resource "kubernetes_ingress_v1" "example_ingress" {
   metadata {
-    name = "example-ingress"
+    name      = "example-ingress"
     namespace = "tst-ns-tfm"
     annotations = {
-      "kubernetes.io/ingress.class" = "nginx",
-      "cert-manager.io/cluster-issuer" = "syndeno-issuer"
-      "kubernetes.io/ingress.allow-http" = "false"
+      "kubernetes.io/ingress.class"                 = "nginx",
+      "cert-manager.io/cluster-issuer"              = "syndeno-issuer"
+      "kubernetes.io/ingress.allow-http"            = "false"
       "nginx.ingress.kubernetes.io/proxy-body-size" = "0"
     }
   }
@@ -36,7 +36,7 @@ resource "kubernetes_ingress_v1" "example_ingress" {
     }
 
     tls {
-      hosts = ["nginx.plt.aw.syndeno.net"]
+      hosts       = ["nginx.plt.aw.syndeno.net"]
       secret_name = "nginx.plt.aw.syndeno.net"
     }
   }
@@ -49,7 +49,7 @@ resource "kubernetes_ingress_v1" "example_ingress" {
 
 resource "kubernetes_service_v1" "example" {
   metadata {
-    name = "myapp-1"
+    name      = "myapp-1"
     namespace = "tst-ns-tfm"
   }
   spec {
