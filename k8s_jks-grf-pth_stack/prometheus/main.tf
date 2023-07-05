@@ -78,7 +78,7 @@ resource "kubernetes_config_map_v1" "prometheus-config" {
     alertmanagers:
     - static_configs:
         - targets:
-            - "172.30.0.3:9093"
+            - "alert-service.jks-grf-pth.svc.cluster.local:9093"
 
   scrape_configs:
     - job_name: dc_prometheus
@@ -98,9 +98,17 @@ resource "kubernetes_config_map_v1" "prometheus-config" {
         - targets: ['pth.plt.gc.syndeno.net']
         - targets: ['pth.plt.prezo.info']
         - targets: ['pth.plt.growpro.syndeno.io']
+        - targets: ['prometheus.plt.aw.syndeno.net']
       basic_auth:
         username: 'admin'
         password: 'Syndeno2022!'
+    - job_name: 'jenkins'
+      metrics_path: '/prometheus/'
+      static_configs:
+        - targets: ['jks.plt.aw.syndeno.net']
+    - job_name: 'alertmanager'
+      static_configs:
+        - targets: ['alertmanager.plt.aw.syndeno.net']
     EOF
   }
 }
