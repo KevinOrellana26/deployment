@@ -103,9 +103,9 @@ resource "kubernetes_config_map_v1" "prometheus-config" {
         username: 'admin'
         password: 'Syndeno2022!'
     - job_name: 'jenkins'
-      metrics_path: '/prometheus'
       static_configs:
-        - targets: ['jks.plt.aw.syndeno.net']
+        - targets:
+          - "jks-service.jks-grf-pth.svc.cluster.local:8080"
     - job_name: 'alertmanager'
       static_configs:
         - targets: ['alertmanager.plt.aw.syndeno.net']
